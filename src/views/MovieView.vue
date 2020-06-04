@@ -13,55 +13,55 @@
             </div>
             <div slot="right" class="movie-content" style="width: 1000px">
               <span v-show="movie.director">
-                <span class="pl">导演：</span>
+                <span class="pl">Directors：</span>
                 <span class="attrs">{{ movie.director }}</span>
                 <br>
               </span>
               <span v-show="movie.writer">
-                <span class="pl">编剧：</span>
+                <span class="pl">Writers：</span>
                 <span class="attrs">{{ movie.writer }}</span>
                 <br>
               </span>
               <span v-show="movie.actors" class="actor">
-                <span class="pl">主演：</span>
+                <span class="pl">Actors：</span>
                 <span class="attrs">
                   <span>{{ movie.actors }}</span>
                 </span>
                 <br>
               </span>
               <span v-show="movie.genre">
-                <span class="pl">类型：</span>
+                <span class="pl">Genre：</span>
                 <span class="attrs">{{ movie.genre }}</span>
                 <br>
               </span>
               <span v-show="movie.country">
-                <span class="pl">制片国家/地区：</span>
+                <span class="pl">Country：</span>
                 {{ movie.country }}
                 <br>
               </span>
               <span v-show="movie.language">
-                <span class="pl">语言：</span>
+                <span class="pl">Language：</span>
                 {{ movie.language }}
                 <br>
               </span>
               <span v-show="movie.released">
-                <span class="pl">上映日期：</span>
+                <span class="pl">Released：</span>
                 <span>{{ movie.released }}</span>
                 <br>
               </span>
               <span v-show="movie.runtime">
-                <span class="pl">片长：</span>
+                <span class="pl">Runtime：</span>
                 <span>{{ movie.runtime }}</span>
                 <br>
               </span>
-              <span v-show="movie.imdbID">
-                <span class="pl">IMDb链接：</span>
-                <a :href="'https://www.imdb.com/title/' + movie.imdbID">{{ movie.imdbID }}</a>
+              <span v-show="movie.imdb_id">
+                <span class="pl">ImdbID：</span>
+                <a :href="'https://www.imdb.com/title/' + movie.imdb_id">{{ movie.imdb_id }}</a>
                 <br>
               </span>
               <span v-show="imdbRating">
                 <div id="ratingPlace">
-                  <span id="ratingLeft" class="pl">IMDb评分：</span>
+                  <span id="ratingLeft" class="pl">ImdbRating：</span>
                   <el-rate id="ratingRight" v-model="imdbRating" :max="10" disabled show-score :colors="['#99A9BF', '#F7BA2A', '#FF9900']" />
                 </div>
                 <br>
@@ -71,7 +71,7 @@
         </section>
       </div>
       <section id="synopsis" class="section-same">
-        <h2>剧情简介</h2>
+        <h2>Plots</h2>
         <div id="synopsis-content">
           {{ movie.plot }}
         </div>
@@ -79,11 +79,11 @@
       <br><br><br><br><br><br>
       <br>
       <section v-if="movie.awards" id="award" class="section-same">
-        <h2>获奖情况</h2>
+        <h2>Awards</h2>
         {{ movie.awards }}
       </section>
       <section class="like-movies">
-        <h2>喜欢这部电影的人也喜欢</h2>
+        <h2>People who like this movie also like</h2>
         <div class="border-movie" v-for="similarityMovie in movie.similarityMovies" :key="similarityMovie.id">
           <div class="single-movie" @click="goTo(similarityMovie.id)">
             <img width="100%" height="85%" :src="similarityMovie.poster" >
@@ -116,7 +116,7 @@ export default {
     ]),
     imdbRating: {
       get: function() {
-        return parseFloat(this.movie.imdbRating)
+        return parseFloat(this.movie.imdb_rating)
       },
       set: function() {
       }
@@ -152,7 +152,7 @@ export default {
     get_one_movie() {
       var id = this.$route.params.id
       movieApi.searchMovieByID(id).then((res) => {
-        this.movie = res.data.data
+        this.movie = res.data.Data
         movieApi.similarityMovieByID(id).then((res) => {
           this.$set(this.movie, 'similarityMovies', res.data.data)
         })

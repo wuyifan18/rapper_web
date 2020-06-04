@@ -19,8 +19,8 @@
               <label>{{movie.runtime}}&nbsp;&nbsp;&nbsp;&nbsp;<label>{{movie.country}}</label></label>
           </div>
           <div class="movie_members">
-          <label>导演&nbsp;&nbsp;&nbsp;&nbsp;{{movie.director}}</label><br>
-          <label>演员&nbsp;&nbsp;&nbsp;&nbsp;{{movie.actors}}</label>
+          <label>Directors:&nbsp;&nbsp;&nbsp;&nbsp;{{movie.director}}</label><br>
+          <label>Actors:&nbsp;&nbsp;&nbsp;&nbsp;{{movie.actors}}</label>
           </div>
           </div>
           <div class="movie_comment">
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      msg: '今日电影推荐',
+      msg: 'Today\'s movies',
       current_movie: '',
       movies: []
     }
@@ -60,7 +60,7 @@ export default {
         if (res.data['Response'] === 'False') {
           this.$message({ message: res.data['Error'], type: 'warning', duration: 1000, center: true })
         } else {
-          this.movies = res.data.data.projects.slice(0, 5)
+          this.movies = res.data.Data.slice(0, 5)
         }
       })
     },

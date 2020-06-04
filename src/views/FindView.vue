@@ -1,6 +1,6 @@
 <template>
     <div class="find-view">
-        <h2>电影导航</h2>
+        <h2>Movie Navigation</h2>
         <div class="button_index">
             <mu-flat-button v-for="type in typeList" :key="type" :label="type" class="demo-flat-button" @click="chooseType(type)" :backgroundColor="type===current_type?'#0066CC':''" :color="type===current_type?'#FFFFFF':''"/>
         </div>
@@ -23,8 +23,8 @@
                             <label>{{movie.runtime}}&nbsp;&nbsp;&nbsp;&nbsp;<label>{{movie.country}}</label></label>
                         </div>
                         <div class="movie_members">
-                            <label>导演&nbsp;&nbsp;&nbsp;&nbsp;{{movie.director}}</label><br>
-                            <label>演员&nbsp;&nbsp;&nbsp;&nbsp;{{movie.actors}}</label>
+                            <label>Directors:&nbsp;&nbsp;&nbsp;&nbsp;{{movie.director}}</label><br>
+                            <label>Actors:&nbsp;&nbsp;&nbsp;&nbsp;{{movie.actors}}</label>
                         </div>
                     </div>
                     <div class="movie_comment">
@@ -52,8 +52,7 @@ export default {
   data() {
     return {
       current_type: '',
-      typeList: ['纪录', '音乐', '体育', '短片', '惊悚', '神秘', '喜剧', '犯罪', '历史', '传记', '冒险', '爱情', '动作', '戏剧', '西方', '战争', '恐怖', '动画', '科幻', '家庭'],
-      typeMap: ['Documentary', 'Music', 'Sport', 'Short', 'Thriller', 'Mystery', 'Comedy', 'Crime', 'History', 'Biography', 'Adventure', 'Romance', 'Action', 'Drama', 'Western', 'War', 'Horror', 'Animation', 'Sci-Fi', 'Family'],
+      typeList: ['Documentary', 'Sport', 'Thriller', 'Mystery', 'Comedy', 'Crime', 'History', 'Biography', 'Adventure', 'Romance', 'Action', 'Drama', 'Western', 'War', 'Horror', 'Animation', 'Sci-Fi', 'Family'],
       current_movie: '',
       movies: '',
       page: 1,
@@ -68,10 +67,10 @@ export default {
     fetchData(page) {
       this.page = page
       this.movies = ''
-      const type = this.typeMap[this.typeList.indexOf(this.current_type)]
+      const type = this.current_type
       movieApi.getMovieByType(type, this.page).then((res) => {
-        this.total = res.data.data.total
-        this.movies = res.data.data.projects
+        this.total = res.data.Count
+        this.movies = res.data.Data
       })
     },
     change_movieclass: function(arg) {

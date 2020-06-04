@@ -6,8 +6,8 @@
           <router-link to="/" exact>
             <img class="logo" src="./assets/cat.png" alt="logo">
           </router-link>
-          <router-link to="/">首页</router-link>
-          <router-link to="/find">发现电影</router-link>
+          <router-link to="/">Homepage</router-link>
+          <router-link to="/find">Find movies</router-link>
         </div>
         <div slot="right" class="search-bar">
           <simple-search />
@@ -17,7 +17,7 @@
           slot="right"
           type="primary"
           @click="goTo('/login')"
-        >登录/注册</el-button>
+        >Sign In</el-button>
         <img
           v-if="login"
           slot="right"

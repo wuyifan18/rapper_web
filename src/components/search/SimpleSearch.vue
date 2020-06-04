@@ -1,6 +1,6 @@
 <template>
   <div class="simple-search" @keyup.enter="onSearch" @mouseover="changeMouseStatus(true)">
-    <mu-text-field v-model="searchKeywords" class="appbar-search-field"  slot="right" hintText="请输入搜索内容"/>
+    <mu-text-field v-model="searchKeywords" class="appbar-search-field"  slot="right" hintText="Search movies"/>
     <div v-if="searchKeywords!=='' && isMouseOver" class="search-suggest">
       <span class="close-search-suggest" @click="changeMouseStatus(false)">关闭</span>
       <mu-list>
@@ -42,7 +42,7 @@ export default {
     getSuggestionMovie:
       _.debounce(function() {
         movieApi.searchMovieByTitle(this.searchKeywords, 1, false).then((res) => {
-          this.suggestions = res.data.data.projects
+          this.suggestions = res.data.Data
         })
       }, 500)
   },

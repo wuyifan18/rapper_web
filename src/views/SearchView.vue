@@ -13,12 +13,12 @@
             </div>
             <div slot="right" class="movie-content">
               <br>
-              <span>电影名：{{ movie.title }}</span>
+              <span>Title：{{ movie.title }}</span>
               <br>
               <br>
-              <span>发行年份：{{ movie.year }}</span>
+              <span>Released：{{ movie.year }}</span>
               <br>
-              <span>imdb评分：{{ movie.imdb_rating }}</span>
+              <span>ImdbRating：{{ movie.imdb_rating }}</span>
             </div>
           </div>
         </template>
@@ -61,8 +61,8 @@ export default {
         if (res.data['Response'] === 'False') {
           this.$message({ message: res.data['Error'], type: 'warning', duration: 1000, center: true })
         } else {
-          this.total = parseInt(res.data.data.total)
-          this.movies = res.data.data.projects
+          this.total = parseInt(res.data.Count)
+          this.movies = res.data.Data
         }
       })
     }

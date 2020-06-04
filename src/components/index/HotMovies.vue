@@ -48,7 +48,7 @@ export default {
   name: 'HotMovies',
   data() {
     return {
-      msg: '正在热映的电影',
+      msg: 'New movies',
       value5: 4.7
     }
   },
