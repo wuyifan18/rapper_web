@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import defaultAvatar from './assets/avatar.png'
 import SimpleSearch from './components/search/SimpleSearch'
 
@@ -66,9 +65,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'token'
-    ]),
     login() {
       return this.$store.state.user.login
     }
@@ -78,8 +74,7 @@ export default {
       this.$router.push(route)
     },
     logout() {
-      var data = { Token: this.token }
-      this.$store.dispatch('doLogout', data)
+      this.$store.dispatch('doLogout')
       this.$router.push('/')
     },
     toggle(flag) {

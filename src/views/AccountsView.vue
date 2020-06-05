@@ -3,9 +3,9 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="menu">
-          <h2>信息设置</h2>
-          <router-link class="menu-item" to="/accounts/user-info">我的信息</router-link>
-          <router-link class="menu-item" to="/accounts/user-password">更改密码</router-link>
+          <h2>Settings</h2>
+          <router-link class="menu-item" to="/accounts/user-info">Your profile</router-link>
+          <router-link class="menu-item" to="/accounts/user-password">Change password</router-link>
         </div>
       </el-col>
       <el-col :span="18">

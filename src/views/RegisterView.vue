@@ -1,58 +1,55 @@
 <template>
     <div class="login-view">
-        <h1 style="text-align:center">用户注册</h1>
         <div class="login-container">
-            <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" label-position="left">
-                <el-form-item prop="username">
-          <span class="svg-container">
-          </span>
+            <el-form ref="loginForm" :model="loginForm" class="login-form" label-width="100px">
+                <el-form-item label="Username" prop="username" :rules="[{ required: true, message: 'Username can\'t be blank'}]">
                     <el-input
                             ref="username"
                             v-model="loginForm.username"
-                            placeholder="用户名"
                             type="text"
                     />
                 </el-form-item>
-                <el-form-item prop="password">
-          <span class="svg-container">
-          </span>
+                <el-form-item label="Password" prop="password" :rules="[{ required: true, message: 'Password can\'t be blank'}]">
                     <el-input
                             ref="password"
                             v-model="loginForm.password"
-                            placeholder="密码"
                             :type="passwordType"
                     />
                     <span class="show-pwd" @click="showPwd">
           </span></el-form-item>
-                <el-form-item prop="nickname">
-                    <el-input
-                            ref="nickname"
-                            v-model="loginForm.nickname"
-                            placeholder="昵称"
-                            type="text"
-                    />
-                </el-form-item>
-                <el-form-item prop="phone">
+                <el-form-item label="Phone" prop="phone">
                     <el-input
                             ref="phone"
                             v-model="loginForm.phone"
-                            placeholder="手机"
+                            type="text"
+                    />
+                </el-form-item>
+                <el-form-item label="Email" prop="email">
+                    <el-input
+                            ref="email"
+                            v-model="loginForm.email"
+                            type="text"
+                    />
+                </el-form-item>
+                <el-form-item label="Motto" prop="motto">
+                    <el-input
+                            ref="motto"
+                            v-model="loginForm.motto"
                             type="text"
                     />
                 </el-form-item>
                 <el-button
                         :loading="loading"
                         type="primary"
-                        style="margin-left:100px;margin-right:70px"
+                        style="margin-left:180px;margin-right:70px"
                         @click.native.prevent="register"
-                >注册</el-button>
+                >Sign up</el-button>
             </el-form>
         </div>
     </div>
 </template>
 
 <script>
-import SHA512 from 'crypto-js/sha512'
 import userApi from '../api/userApi'
 export default {
   name: 'LoginView',
@@ -61,14 +58,9 @@ export default {
       loginForm: {
         username: '',
         password: '',
-        nickname: '',
-        phone: ''
-      },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur' }],
-        nickname: [{ required: true, trigger: 'blur' }],
-        phone: [{ required: true, trigger: 'blur' }]
+        motto: '',
+        phone: '',
+        email: ''
       },
       passwordType: 'password'
     }
@@ -90,18 +82,15 @@ export default {
       })
     },
     register() {
-      var data = {
-        'Name': this.loginForm.username,
-        'Password': SHA512(this.loginForm.password).toString(),
-        'Nickname': this.loginForm.nickname,
-        'Phone': this.loginForm.phone
-      }
-      if (data.username === '' || data.password === '' || data.nickname === '' || data.phone === '') {
-        this.$message({ message: '注册信息不完整！', type: 'warning', duration: 600, center: true })
-        return
+      const data = {
+        'username': this.loginForm.username,
+        'password': this.loginForm.password,
+        'motto': this.loginForm.motto,
+        'phone': this.loginForm.phone,
+        'email': this.loginForm.email
       }
       userApi.register(data).then(() => {
-        this.$message({ message: '注册成功！', type: 'info', duration: 600, center: true })
+        this.$message({ message: 'success！', type: 'info', duration: 600, center: true })
       }).catch((error) => {
         this.$message({ message: error, type: 'warning', duration: 600, center: true })
       })
@@ -129,7 +118,7 @@ export default {
 
         .login-form {
             position: relative;
-            width: 370px;
+            width: 450px;
             max-width: 100%;
             padding: 100px 35px 0;
             margin: 0 auto;
@@ -159,6 +148,8 @@ export default {
             position: absolute;
             right: 10px;
             top: 7px;
+            width: 30px;
+            height: 30px;
             font-size: 16px;
             cursor: pointer;
             user-select: none;

@@ -1,24 +1,21 @@
 <template>
   <div id="form">
-    <h2>我的信息</h2>
-    <el-form ref="form" :model="form" label-width="80px" label-position="top">
-      <el-form-item label="用户名" style="width:400px">
+    <h2>Profile</h2>
+    <el-form ref="user" :model="user" label-width="80px" label-position="top">
+      <el-form-item label="Username" style="width:400px">
         <el-input v-model="user.name" disabled></el-input>
       </el-form-item>
-      <el-form-item label="昵称" style="width:400px">
-        <el-input v-model="user.nickname"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱" style="width:400px">
+      <el-form-item label="Email" style="width:400px">
         <el-input v-model="user.email"></el-input>
       </el-form-item>
-      <el-form-item label="手机" style="width:400px">
+      <el-form-item label="Phone" style="width:400px">
         <el-input v-model="user.phone"></el-input>
       </el-form-item>
-      <el-form-item label="个性签名" style="width:400px">
+      <el-form-item label="Motto" style="width:400px">
         <el-input v-model="user.motto"></el-input>
       </el-form-item>
       </el-form>
-    <el-button type="primary" @click="submit()" style="margin-left: 150px">保 存</el-button>
+    <el-button type="primary" @click="submit()" style="margin-left: 150px">Save</el-button>
   </div>
 </template>
 
@@ -33,7 +30,7 @@ export default {
     return {
       user: {
         name: '',
-        phome: '',
+        phone: '',
         email: '',
         motto: ''
       }
@@ -41,7 +38,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'token'
+      'user_id'
     ])
   },
   created() {
@@ -50,21 +47,19 @@ export default {
   methods: {
     submit() {
       var data = {
-        'Token': this.token,
-        'Name': this.user.username,
-        'Nickname': this.user.nickname,
-        'Phone': this.user.phone,
-        'Email': this.user.email,
-        'Motto': this.user.motto
+        'user_id': this.user_id,
+        'name': this.user.username,
+        'email': this.user.email,
+        'motto': this.user.motto,
+        'phone': this.user.phone
       }
       userApi.updateProfile(data).then(() => {
-        this.$message({ message: '修改成功！', type: 'info', duration: 600, center: true })
+        this.$message({ message: 'success！', type: 'info', duration: 600, center: true })
       })
     },
     get() {
-      var data = { 'Token': this.token }
-      userApi.getProfile(data).then((response) => {
-        this.user = response.data.user_info
+      userApi.getProfile(this.user_id).then((response) => {
+        this.user = response.data.Data
       })
     }
   }

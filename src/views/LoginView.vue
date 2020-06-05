@@ -1,25 +1,18 @@
 <template>
   <div class="login-view">
-    <h1 style="text-align:center">用户登录</h1>
     <div class="login-container">
-      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" label-position="left">
-        <el-form-item prop="username">
-          <span class="svg-container">
-          </span>
+      <el-form ref="loginForm" :model="loginForm" class="login-form" label-width="100px">
+        <el-form-item label="Username" prop="username" :rules="[{ required: true, message: 'Username can\'t be blank'}]">
           <el-input
             ref="username"
             v-model="loginForm.username"
-            placeholder="用户名"
             type="text"
           />
         </el-form-item>
-        <el-form-item prop="password">
-          <span class="svg-container">
-          </span>
+        <el-form-item label="Password" prop="password" :rules="[{ required: true, message: 'Password can\'t be blank'}]">
           <el-input
             ref="password"
             v-model="loginForm.password"
-            placeholder="密码"
             :type="passwordType"
           />
           <span class="show-pwd" @click="showPwd">
@@ -27,15 +20,15 @@
         <el-button
           :loading="loading"
           type="primary"
-          style="margin-left:30px;margin-right:70px"
+          style="margin-left:90px;margin-right:70px"
           @click.native.prevent="register"
-        >注册
+        >Sign up
         </el-button>
         <el-button
           :loading="loading"
           type="primary"
           @click.native.prevent="doLogin"
-        >登录
+        >Sign in
         </el-button>
       </el-form>
     </div>
@@ -43,7 +36,6 @@
 </template>
 
 <script>
-import SHA512 from 'crypto-js/sha512'
 export default {
   name: 'LoginView',
   data() {
@@ -51,10 +43,6 @@ export default {
       loginForm: {
         username: '',
         password: ''
-      },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur' }]
       },
       passwordType: 'password'
     }
@@ -79,12 +67,12 @@ export default {
       this.$router.push('/Register')
     },
     doLogin() {
-      var data = {
-        'Name': this.loginForm.username,
-        'Password': SHA512(this.loginForm.password).toString()
+      const data = {
+        'name': this.loginForm.username,
+        'password': this.loginForm.password
       }
       this.$store.dispatch('doLogin', data).then(() => {
-        this.$message({ message: '登录成功！', type: 'info', duration: 600, center: true })
+        this.$message({ message: 'success！', type: 'info', duration: 600, center: true })
         this.password = ''
         this.$router.push('/')
       }).catch((error) => {
@@ -113,7 +101,7 @@ export default {
 
         .login-form {
             position: relative;
-            width: 370px;
+            width: 450px;
             max-width: 100%;
             padding: 100px 35px 0;
             margin: 0 auto;
@@ -143,6 +131,8 @@ export default {
             position: absolute;
             right: 10px;
             top: 7px;
+            width: 30px;
+            height: 30px;
             font-size: 16px;
             cursor: pointer;
             user-select: none;
