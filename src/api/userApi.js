@@ -45,11 +45,10 @@ export default {
       headers: { 'showLoading': false }
     })
   },
-  getRecord(data) {
+  getRecord(user_id, page) {
     return http({
       method: 'post',
-      url: '/api/user/footprints',
-      data: data,
+      url: '/api/rating/display/user?user_id=' + user_id + '&per_page=10&page=' + page,
       headers: { 'showLoading': false }
     })
   }

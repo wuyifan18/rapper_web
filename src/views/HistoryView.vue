@@ -3,8 +3,8 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="menu">
-          <h2>我的记录</h2>
-          <router-link class="menu-item" to="/history/browsing-history">浏览记录</router-link>
+          <h2>Records</h2>
+          <router-link class="menu-item" to="/history/browsing-history">Score records</router-link>
         </div>
       </el-col>
       <el-col :span="18">

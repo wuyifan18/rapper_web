@@ -11,7 +11,7 @@
             <div class="movie-img" style="float: left; width: 250px">
               <img slot="left" :src="movie.poster" style="width: 200px">
             </div>
-            <div slot="right" class="movie-content" style="width: 1000px">
+            <div slot="right">
               <span v-show="movie.director">
                 <span class="pl">Directors：</span>
                 <span class="attrs">{{ movie.director }}</span>
@@ -64,17 +64,55 @@
                   <span id="ratingLeft" class="pl">ImdbRating：</span>
                   <el-rate id="ratingRight" v-model="imdbRating" :max="10" disabled show-score :colors="['#99A9BF', '#F7BA2A', '#FF9900']" />
                 </div>
-                <br>
+                <br><br><br>
               </span>
+                <span style="float: left" class="pl">Your rating：</span>
+              <el-rate
+                      ref="rate"
+                      v-model="score"
+                      show-score
+                      allow-half
+                      :disabled=disabled
+                      text-color="#ff9900"
+                      score-template="{value}"
+                      @click.native=insertScore()>
+              </el-rate>
             </div>
           </div>
+        </section>
+        <section id="header-right">
+          <table class="table-normal">
+            <thead>
+            <tr>
+              <td width="66%">
+                Name
+              </td>
+              <td width="34%">
+                Score
+              </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in ratings" v-bind:key="item.id">
+              <td>{{item.Name}}</td>
+              <td>{{item.Score}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <el-pagination
+                  v-if=ratings
+                  layout="total, prev, pager, next, jumper"
+                  style="float: left;margin-top: 20px;margin-bottom: 20px"
+                  :total="total"
+                  :page-size=15
+                  :current-page="page"
+                  @current-change="getScore"
+          />
         </section>
       </div>
       <section id="synopsis" class="section-same">
         <h2>Plots</h2>
-        <div id="synopsis-content">
-          {{ movie.plot }}
-        </div>
+        {{ movie.plot }}
       </section>
       <br><br><br><br><br><br>
       <br>
@@ -106,13 +144,17 @@ export default {
   data() {
     return {
       movie: '',
-      second: 0
+      ratings: '',
+      page: 1,
+      total: null,
+      score: null,
+      disabled: false
     }
   },
   computed: {
     ...mapGetters([
-      'token',
-      'login'
+      'login',
+      'user_id'
     ]),
     imdbRating: {
       get: function() {
@@ -124,38 +166,35 @@ export default {
   },
   mounted() {
     this.get_one_movie()
-    setInterval(() => {
-      this.second++
-    }, 1000)
-  },
-  destroyed() {
-    if (this.login !== false) {
-      var data = {
-        'token': this.token,
-        'movie_title': this.movie.title,
-        'movie_id': this.movie.id,
-        'time_on_site': String(this.second)
-      }
-      userApi.insertRecord(data)
-    }
-  },
-  watch: {
-    '$route'(to, from) {
-      this.get_one_movie()
-      this.second = 0
-      setInterval(() => {
-        this.second++
-      }, 1000)
-    }
+    this.getScore(this.page)
   },
   methods: {
+    insertScore() {
+      if (this.disabled === true) return
+      let s = this.score
+      if (this.score.toString().length === 1) { s = this.score.toString() + '.0' }
+      console.log(this.score)
+      movieApi.insertMovieRating(this.user_id, this.$route.params.id, s).then(() => {
+        this.$message({ message: 'success！', type: 'info', duration: 600, center: true })
+        this.getScore(this.page)
+        this.disabled = true
+      })
+    },
     get_one_movie() {
-      var id = this.$route.params.id
+      const id = this.$route.params.id
       movieApi.searchMovieByID(id).then((res) => {
         this.movie = res.data.Data
         movieApi.similarityMovieByID(id).then((res) => {
           this.$set(this.movie, 'similarityMovies', res.data.data)
         })
+      })
+    },
+    getScore(page) {
+      this.page = page
+      this.ratings = ''
+      movieApi.getMovieRatings(this.$route.params.id, this.page).then(res => {
+        this.total = res.data.Count
+        this.ratings = res.data.Data
       })
     },
     goTo(id) {
@@ -195,7 +234,7 @@ h1
 a
   color:#0085DD;
 .section-same
-  width:1000px;
+  width:800px;
   float:left;
   margin-left:10%;
   margin-right:10%;
@@ -210,11 +249,39 @@ a
       width:70%;
 #header-left
   float:left;
-  width: 1200px;
+  width: 800px;
 #header-right
-  padding-top:50px;
-  margin-left:600px;
-  width: 500px;
+  padding-top:30px;
+  margin-left:850px;
+  width: 200px;
+  position: absolute;
+  .table-normal
+    width 100%
+    height 100%
+    border-collapse collapse
+    border-spacing 2px
+    border-color grey
+    vertical-align middle
+    margin-left 40px
+    thead
+      display table-header-group
+      vertical-align middle
+      border-color inherit
+      tr
+        td
+          text-align center
+          background #f5f5f5
+          height 42px
+          border-bottom 1px solid #ddd
+          border-left 1px solid #ddd
+          font-weight bold
+    tbody
+      tr
+        td
+          text-align center
+          height 40px
+          border-left 1px solid #ddd
+          border-bottom 1px solid #ddd
 #comment-btn
   width:80px;
   color:#ca6445;
@@ -226,8 +293,6 @@ a
   background:#fae9da;
 .comment-author
   color:#0085DD;
-#synopsis-content
-  width:1000px;
 
 #photo
   ul
@@ -247,10 +312,6 @@ a
 #ratingLeft
   float:left;
 #ratingRight
-  float:left;
-#commentSubmit
-  float:right;
-#commentCancle
   float:left;
 .alsoLikeID
   margin: 10px 10px 10px 10px

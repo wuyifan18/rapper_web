@@ -25,17 +25,17 @@
           style="width: 60px;height: 45px"
           @click="toggle(true)"/>
         <mu-drawer right :open="open" :docked="docked" width="200" @close="toggle()">
-          <mu-appbar title="个人中心">
+          <mu-appbar title="Center">
             <mu-icon-button slot="left" icon="menu" @click="toggle()" />
           </mu-appbar>
           <mu-list @itemClick="toggle()">
-            <mu-list-item title="信息管理" @click="goTo('/accounts')">
+            <mu-list-item title="Settings" @click="goTo('/accounts')">
               <mu-icon slot="left" value="info" />
             </mu-list-item>
-            <mu-list-item title="浏览记录" @click="goTo('/history')">
+            <mu-list-item title="Records" @click="goTo('/history')">
               <mu-icon slot="left" value="history" />
             </mu-list-item>
-            <mu-list-item title="退出登录" @click="logout">
+            <mu-list-item title="Sign out" @click="logout">
               <mu-icon slot="left" value="input" />
             </mu-list-item>
           </mu-list>

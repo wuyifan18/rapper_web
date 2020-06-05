@@ -20,6 +20,18 @@ export default {
       url: '/api/movie/query/id?movie_id=' + id
     })
   },
+  getMovieRatings(id, page) {
+    return http({
+      method: 'post',
+      url: '/api/rating/display/movie?movie_id=' + id + '&per_page=15&page=' + page
+    })
+  },
+  insertMovieRating(user_id, movie_id, score) {
+    return http({
+      method: 'post',
+      url: '/api/rating/new?user_id=' + user_id + '&movie_id=' + movie_id + '&score=' + score
+    })
+  },
   similarityMovieByID(id) {
     return http({
       method: 'get',

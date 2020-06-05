@@ -1,26 +1,43 @@
 <template>
   <div class="browsing-history">
-    <h3>浏览记录</h3>
+    <h3>Score records</h3>
     <div class="table-wrapper">
       <table class="table-normal">
         <thead>
           <tr>
             <td width="34%">
-              时间
+              Title
             </td>
             <td width="66%">
-              电影
+              Score
             </td>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in movies" v-bind:key="item.id">
-            <td>{{item.created_time}}</td>
-            <td>{{item.movie_title}}</td>
+            <td>{{item.Title}}</td>
+            <td>
+              <el-rate
+                    v-model="item.Score"
+                    show-score
+                    disabled
+                    text-color="#ff9900"
+                    score-template="{value}">
+            </el-rate>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <el-pagination
+            v-if=movies
+            layout="total, prev, pager, next, jumper"
+            style="float: left;margin-left: 150px;margin-top: 20px;margin-bottom: 20px"
+            :total="total"
+            :page-size=10
+            :current-page="page"
+            @current-change="fetchData"
+    />
   </div>
 </template>
 
@@ -31,35 +48,30 @@ export default {
   name: 'BrowsingHistory',
   data() {
     return {
-      movies: ''
+      movies: '',
+      page: 1,
+      total: null
     }
   },
   computed: {
     ...mapGetters([
-      'token'
+      'user_id'
     ])
   },
   mounted() {
-    const data = {
-      'Token': this.token
-    }
-    userApi.getRecord(data).then(res => {
-      res.data.data.map(item => {
-        item.created_time = this.formatTime(item.created_time)
-      })
-      this.movies = res.data.data
-    })
+    this.fetchData(this.page)
   },
   methods: {
-    formatTime(timestamp) {
-      const date = new Date(timestamp * 1000)
-      var Y = date.getFullYear() + '-'
-      var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
-      var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
-      var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
-      var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
-      var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
-      return Y + M + D + h + m + s
+    fetchData(page) {
+      this.page = page
+      this.movies = ''
+      userApi.getRecord(this.user_id, this.page).then(res => {
+        this.total = res.data.Count
+        res.data.Data.map(item => {
+          item.Score = parseFloat(item.Score)
+        })
+        this.movies = res.data.Data
+      })
     }
   }
 }
