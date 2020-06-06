@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <div class="header">
-      <mu-appbar>
+      <mu-appbar style="background-color: skyblue">
         <div class="inner">
           <router-link to="/" exact>
             <img class="logo" src="./assets/cat.png" alt="logo">
           </router-link>
-          <router-link to="/">Homepage</router-link>
-          <router-link to="/find">Find movies</router-link>
+          <router-link to="/" style="color: grey">Homepage</router-link>
+          <router-link to="/find" style="color: grey">Find movies</router-link>
         </div>
         <div slot="right" class="search-bar">
           <simple-search />
@@ -25,7 +25,7 @@
           style="width: 60px;height: 45px"
           @click="toggle(true)"/>
         <mu-drawer right :open="open" :docked="docked" width="200" @close="toggle()">
-          <mu-appbar title="Center">
+          <mu-appbar title="Center" style="background-color: skyblue">
             <mu-icon-button slot="left" icon="menu" @click="toggle()" />
           </mu-appbar>
           <mu-list @itemClick="toggle()">
