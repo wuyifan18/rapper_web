@@ -1,6 +1,6 @@
 <template>
     <div class="find-view">
-        <h2>Movie Navigation</h2>
+        <h2 style="margin:20px 0 0 0">Movie Navigation</h2>
         <div class="button_index">
             <mu-flat-button v-for="type in typeList" :key="type" :label="type" class="demo-flat-button" @click="chooseType(type)" :backgroundColor="type===current_type?'#0066CC':''" :color="type===current_type?'#FFFFFF':''"/>
         </div>
@@ -36,7 +36,7 @@
         <el-pagination
                 v-if=movies
                 layout="total, prev, pager, next, jumper"
-                style="float: left;margin-left: 300px;margin-top: 40px;margin-bottom: 20px"
+                style="float: left;margin-left: 350px;margin-top: 40px;margin-bottom: 20px"
                 :total="total"
                 :page-size=9
                 :current-page="page"
@@ -51,13 +51,16 @@ export default {
   name: 'FindView',
   data() {
     return {
-      current_type: '',
+      current_type: 'Documentary',
       typeList: ['Documentary', 'Sport', 'Thriller', 'Mystery', 'Comedy', 'Crime', 'History', 'Biography', 'Adventure', 'Romance', 'Action', 'Drama', 'Western', 'War', 'Horror', 'Animation', 'Sci-Fi', 'Family'],
       current_movie: '',
       movies: '',
       page: 1,
       total: null
     }
+  },
+  mounted() {
+    this.fetchData(this.page)
   },
   methods: {
     chooseType(arg) {
@@ -93,6 +96,7 @@ export default {
 
 <style lang="stylus" scoped>
     .find-view
+        margin-top 10px
         width 1400px
         height auto
         overflow hidden
@@ -111,7 +115,7 @@ export default {
     .find-view .movies-result
         width 1100px
         height 550px
-        margin 0 auto
+        margin-left 100px
     @media screen and (min-width: 1201px) {
         .find-view .movies-result {width: 1100px}
     }
@@ -188,22 +192,12 @@ export default {
         margin 20px auto
         height 300px
     .button_index
+        width 200px
         padding 0
         border-bottom 1px solid #BEBEBE
-    @media screen and (min-width: 1201px) {
-        .button_index {width: 1140px}
-    }
-    @media screen and (max-width: 1200px) {
-        .button_index {width: 1140px}
-    }
-    @media screen and (max-width: 900px) {
-        .button_index {width: 200px;}
-    }
-    @media screen and (max-width: 500px) {
-        .button_index {width: 100px;}
-    }
+        position absolute
     .demo-flat-button
-        margin 12px
+        margin 5px
     .select_index
         border-top 1px solid #BEBEBE
         height 80px
@@ -220,10 +214,8 @@ export default {
         .select_index {width: 100px;}
     }
     .demo-flat-button
-        margin: 12px
     .select_title
         width 140px
-        margin 20px
         float left
         padding 5px
     .select_title label
