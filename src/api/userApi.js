@@ -37,14 +37,6 @@ export default {
       url: '/api/user/change/password?user_id=' + data['user_id'] + '&old_password=' + data['old_password'] + '&new_password=' + data['new_password']
     })
   },
-  insertRecord(data) {
-    return http({
-      method: 'post',
-      url: '/api/user/footprint/new',
-      data: data,
-      headers: { 'showLoading': false }
-    })
-  },
   getRecord(user_id, page) {
     return http({
       method: 'post',

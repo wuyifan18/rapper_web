@@ -1,7 +1,7 @@
 <template>
   <div class="search-view">
     <div class="search-bar" @keyup.enter="searchMovie(1)">
-      <el-input v-model="keywords" placeholder="请输入内容" style="width: 600px;" size="large">
+      <el-input v-model="keywords" style="width: 600px;" size="large">
         <el-button slot="append" icon="el-icon-search" type="primary" @click="searchMovie(1)" />
       </el-input>
     </div>

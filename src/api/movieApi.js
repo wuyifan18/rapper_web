@@ -34,14 +34,14 @@ export default {
   },
   similarityMovieByID(id) {
     return http({
-      method: 'get',
-      url: '/api/movie/similarity?movie=' + id
+      method: 'post',
+      url: '/api/movie/query/sims?movie_id=' + id
     })
   },
   recommendationByUser(id) {
     return http({
-      method: 'get',
-      url: '/api/movie/recommendation?user=' + id
+      method: 'post',
+      url: '/api/movie/query/recs?user_id=' + id
     })
   }
 }

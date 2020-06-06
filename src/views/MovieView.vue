@@ -84,10 +84,10 @@
           <table class="table-normal">
             <thead>
             <tr>
-              <td width="66%">
+              <td width="50%">
                 Name
               </td>
-              <td width="34%">
+              <td width="50%">
                 Score
               </td>
             </tr>
@@ -95,16 +95,26 @@
             <tbody>
             <tr v-for="item in ratings" v-bind:key="item.id">
               <td>{{item.Name}}</td>
-              <td>{{item.Score}}</td>
+              <td>
+                <el-rate
+                      v-model="item.Score"
+                      show-score
+                      disabled
+                      text-color="#ff9900"
+                      score-template="{value}">
+              </el-rate>
+              </td>
             </tr>
             </tbody>
           </table>
           <el-pagination
+                  small
                   v-if=ratings
                   layout="total, prev, pager, next, jumper"
-                  style="float: left;margin-top: 20px;margin-bottom: 20px"
+                  style="margin-top: 20px;text-align: center"
                   :total="total"
                   :page-size=15
+                  :pager-count="5"
                   :current-page="page"
                   @current-change="getScore"
           />
@@ -137,7 +147,6 @@
 
 <script>
 import movieApi from '../api/movieApi'
-import userApi from '../api/userApi'
 import { mapGetters } from 'vuex'
 export default {
   name: 'MovieView',
@@ -173,7 +182,6 @@ export default {
       if (this.disabled === true) return
       let s = this.score
       if (this.score.toString().length === 1) { s = this.score.toString() + '.0' }
-      console.log(this.score)
       movieApi.insertMovieRating(this.user_id, this.$route.params.id, s).then(() => {
         this.$message({ message: 'success！', type: 'info', duration: 600, center: true })
         this.getScore(this.page)
@@ -185,7 +193,7 @@ export default {
       movieApi.searchMovieByID(id).then((res) => {
         this.movie = res.data.Data
         movieApi.similarityMovieByID(id).then((res) => {
-          this.$set(this.movie, 'similarityMovies', res.data.data)
+          this.$set(this.movie, 'similarityMovies', res.data.Data)
         })
       })
     },
@@ -194,21 +202,18 @@ export default {
       this.ratings = ''
       movieApi.getMovieRatings(this.$route.params.id, this.page).then(res => {
         this.total = res.data.Count
-        this.ratings = res.data.Data
+        if (this.total !== 0) {
+          res.data.Data.map(item => {
+            item.Score = parseFloat(item.Score)
+          })
+          this.ratings = res.data.Data
+        }
       })
     },
     goTo(id) {
       this.$router.replace('/movie/' + id)
-      if (this.login !== false) {
-        var data = {
-          'token': this.token,
-          'movie_title': this.movie.title,
-          'movie_id': this.movie.id,
-          'time_on_site': String(this.second)
-        }
-        userApi.insertRecord(data)
-      }
       this.get_one_movie()
+      this.getScore(this.page)
     }
   }
 }
@@ -252,11 +257,10 @@ a
   width: 800px;
 #header-right
   padding-top:30px;
-  margin-left:850px;
-  width: 200px;
+  margin-left:800px;
+  width: 380px;
   position: absolute;
   .table-normal
-    width 100%
     height 100%
     border-collapse collapse
     border-spacing 2px
@@ -320,7 +324,7 @@ a
   margin-left:10%;
   margin-right:10%;
   float: left;
-  height 600px
+  height 550px
   h3
     border-bottom 1px solid #d0d0d0
     padding-bottom 15px
@@ -338,7 +342,7 @@ a
   }
 .border-movie
   width: 20%
-  height 47%
+  height 42%
   float left
 .single-movie
   height 100%
